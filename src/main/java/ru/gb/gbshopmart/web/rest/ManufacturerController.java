@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/manufacturer")
+@RequestMapping("/internal/api/v1/manufacturer")
 public class ManufacturerController {
     
     private final ManufacturerService manufacturerService;
