@@ -11,19 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.gb.gbapi.category.dto.CategoryDto;
-import ru.gb.gbapi.manufacturer.dto.ManufacturerDto;
-import ru.gb.gbshopmart.entity.Manufacturer;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ManufacturerControllerIntegTest {
+class CategoryControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -31,16 +27,15 @@ class ManufacturerControllerIntegTest {
     @Autowired
     ObjectMapper objectMapper;
 
-
     @Test
     @Order(1)
-    void testSaveManufacturerTest() throws Exception {
+    void testSaveCategoryTest() throws Exception {
 
-        mockMvc.perform(post("/api/v1/manufacturer")
+        mockMvc.perform(post("/api/v1/category")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper
-                                .writeValueAsString(ManufacturerDto.builder()
-                                        .name("Tesla")
+                                .writeValueAsString(CategoryDto.builder()
+                                        .title("Food")
                                         .build())))
                 .andExpect(status().isCreated());
     }
@@ -49,50 +44,50 @@ class ManufacturerControllerIntegTest {
     @Order(2)
     public void findAllTest() throws Exception {
 
-        mockMvc.perform(get("/api/v1/manufacturer"))
+        mockMvc.perform(get("/api/v1/category"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("id")))
                 .andExpect(jsonPath("$.[0].id").value("1"))
-                .andExpect(jsonPath("$.[0].name").value("Tesla"));
+                .andExpect(jsonPath("$.[0].title").value("Food"));
     }
 
     @Test
     @Order(3)
     public void findByIdTest() throws Exception {
 
-        mockMvc.perform(get("/api/v1/manufacturer/1"))
+        mockMvc.perform(get("/api/v1/category/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("Tesla"));
+                .andExpect(jsonPath("$.title").value("Food"));
     }
 
     @Test
     @Order(4)
-    public void updateManufacturerTest() throws Exception{
+    public void updateCategoryTest() throws Exception{
 
-        mockMvc.perform(put("/api/v1/manufacturer/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper
-                                .writeValueAsString(ManufacturerDto.builder()
-                                        .name("Apple")
-                                        .build())
-                        ))
+        mockMvc.perform(put("/api/v1/category/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper
+                        .writeValueAsString(CategoryDto.builder()
+                                .title("Sport")
+                                .build())
+                ))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/v1/manufacturer/1"))
+        mockMvc.perform(get("/api/v1/category/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("Apple"));
+                .andExpect(jsonPath("$.title").value("Sport"));
     }
 
 
     @Test
     public void deleteByIdTest() throws Exception {
 
-        mockMvc.perform(delete("/api/v1/manufacturer/1"))
+        mockMvc.perform(delete("/api/v1/category/1"))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/v1/manufacturer/1"))
+        mockMvc.perform(get("/api/v1/category/1"))
                 .andExpect(status().isNotFound());
 
     }
