@@ -31,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(
                 (requests) -> {
-                    requests.antMatchers("/product/all").permitAll();
-                    requests.mvcMatchers(HttpMethod.GET, "/product/{productId}").permitAll();
+                    requests.antMatchers("/api/v1/product").permitAll();
+                    requests.mvcMatchers(HttpMethod.GET, "/api/v1/product/{productId}").permitAll();
                     requests.antMatchers(LOGIN_ENDPOINT).permitAll();
                     requests.antMatchers(USER_ENDPOINT).permitAll();
                     requests.anyRequest().authenticated();
