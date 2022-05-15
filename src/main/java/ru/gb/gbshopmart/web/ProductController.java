@@ -10,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gb.gbapi.product.dto.ProductDto;
+import ru.gb.gbshopmart.exceptions.ProductImageNotFoundException;
 import ru.gb.gbshopmart.service.CategoryService;
 import ru.gb.gbshopmart.service.ManufacturerService;
 import ru.gb.gbshopmart.service.ProductImageService;
@@ -93,13 +94,13 @@ public class ProductController {
 
     // todo ДЗ* - сделать поддержку множества картинок для для страницы подробной информации с продуктами
     @GetMapping(value = "images/{id}", produces = MediaType.IMAGE_PNG_VALUE)
-    public @ResponseBody byte[] getImage(@PathVariable Long id) throws IOException {
+    public @ResponseBody byte[] getImage(@PathVariable Long id) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(productImageService.loadProductImageAsResource(id), "png", byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            throw e; // todo ДЗ - заменить на ProductImageNotFoundException
+            throw new ProductImageNotFoundException("Изображение не найдено", e); // todo ДЗ - заменить на ProductImageNotFoundException
         }
     }
 
